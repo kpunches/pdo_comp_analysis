@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online-Only Generalist Master's in Psychology — Top 10 (WGU EPD Competitive Analysis)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body { margin: 0; background: #FAFAF8; }</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+const { useState } = React;
+
+// ————————————————————————————————————————————————————————————
+// WGU EPD Competitive Analysis — Online-Only Generalist Master's in Psychology
+// Composite = 45% ranking-site average + 40% positive sentiment + 15% data freshness
+// All data refreshed / verified 2026-07-24 unless a source-specific date is noted.
+// Course descriptions are paraphrased from official catalogs — follow links for exact language.
+// ————————————————————————————————————————————————————————————
+
+const INK = "#1C2530";
+const PAPER = "#FAFAF8";
+const RULE = "#D9DEE3";
+const TEAL = "#0E7C7B";      // sentiment pillar
+const INDIGO = "#35507A";    // ranking pillar
+const AMBER = "#B3701A";     // freshness pillar / verify flags
+const SERIF = "Georgia, 'Times New Roman', serif";
+const MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
+
+const REFRESH_DEFAULT = "2026-07-24";
+
+const PROGRAMS = [
+  {
+    rank: 1,
+    school: "Capella University",
+    location: "Minneapolis, MN (fully online)",
+    programName: "MS in Psychology — General Psychology specialization",
+    credits: "~48 quarter credits · 10 courses (4 core + 5 specialization + integrative project)",
+    termModel: "GuidedPath (quarter-based) or FlexPath (self-paced, subscription)",
+    description:
+      "Foundational graduate coverage of psychological theory and practice for non-clinical careers or doctoral prep. Capella publishes an 'example course sequence' (its Standard Path equivalent) and is the highest-volume online psych master's producer in the U.S. (1,025 grads in the latest IPEDS year).",
+    url: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/",
+    scores: { rankAvg: 95, sentiment: 76, freshness: 95, composite: 87.4 },
+    sentimentNote: "76% verified-student recommendation rate (OnlineU survey base, 90K+ surveys). FlexPath pacing is the most-praised feature in reviews.",
+    refreshed: "2026-07-24 (live catalog pages)",
+    verification: "High — course codes, titles, credits verified on capella.edu course pages",
+    sequenceNote: "Order follows Capella's published example course sequence (prerequisite-aware).",
+    courses: [
+      { seq: 1, term: "Q1", code: "PSY5002", title: "Foundations of Theory & Practice for Master's Psychology Students", desc: "Orientation to graduate scholarship: research resources, writing expectations, and professional pathways in psychology.", type: "Core", units: "5 qtr cr", outcomes: "Navigate graduate-level scholarship, APA conventions, and career mapping.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 2, term: "Q1", code: "PSY5110", title: "Ethics & Individual Differences in Psychology", desc: "Ethical reasoning applied across settings, with analysis of how human diversity factors shape professional conduct.", type: "Core", units: "5 qtr cr", outcomes: "Apply ethical principles and standards to professional scenarios. Prereq: PSY5002.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 3, term: "Q2", code: "RSCH7860", title: "Survey of Research Methods", desc: "Scientific methods of inquiry, critical evaluation of published research, and research ethics for informed consumers and creators of evidence.", type: "Core", units: "4 qtr cr", outcomes: "Critically evaluate and design basic psychological research.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 4, term: "Q2", code: "PSY5120", title: "Social Psychology", desc: "Decision-making, attitude formation, and social attribution applied to clinical, educational, and organizational contexts.", type: "Specialization", units: "5 qtr cr", outcomes: "Apply social-psychological theory to contemporary applied settings.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 5, term: "Q3", code: "PSY6015", title: "Lifespan Development", desc: "Development from the prenatal period through late adulthood viewed through individual, familial, and systemic lenses.", type: "Specialization", units: "5 qtr cr", outcomes: "Analyze developmental stages and their applied implications.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 6, term: "Q3", code: "PSY6110", title: "Learning Theories in Psychology", desc: "Psychological and learning theories, their principles, and application to how people learn.", type: "Specialization", units: "5 qtr cr", outcomes: "Map learning theory to practice contexts.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 7, term: "Q4", code: "PSY7421", title: "Cognitive/Affective Psychology", desc: "How people acquire, process, and store information, and how cognition and emotion jointly drive behavior.", type: "Specialization", units: "5 qtr cr", outcomes: "Integrate cognitive and affective models to explain behavior.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 8, term: "Q4", code: "—", title: "Specialization elective (per catalog list)", desc: "One additional specialization course selected from the current catalog list.", type: "Elective", units: "5 qtr cr", outcomes: "Depth in a self-selected topic area.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+      { seq: 9, term: "Final", code: "—", title: "Integrative Project for the Master's in Psychology", desc: "Synthesis project demonstrating program outcomes across theory, ethics, research, and application.", type: "Capstone", units: "5 qtr cr", outcomes: "Demonstrate integrated mastery of program outcomes.", syllabus: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", syllabusLabel: "Capella course page" },
+    ],
+  },
+  {
+    rank: 2,
+    school: "National University",
+    location: "San Diego, CA (fully online)",
+    programName: "MA in Psychology — General Psychology specialization",
+    credits: "30 semester credits · 10 courses",
+    termModel: "Weekly course starts; 4-week classes, one at a time; no group work or scheduled lectures",
+    description:
+      "Streamlined 30-credit generalist MA (recently reduced from 36) built for full schedule autonomy — a direct structural competitor to WGU's flexibility positioning. Strongest verified salary outcome among high-volume programs ($75,020 median at 4 years).",
+    url: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/",
+    scores: { rankAvg: 96, sentiment: 72, freshness: 98, composite: 86.7 },
+    sentimentNote: "No OnlineU survey rate published; sentiment estimated from salary outcomes, review themes praising one-course-at-a-time autonomy, and mixed Reddit notes on 4-week pacing.",
+    refreshed: "2026-07-24 (nu.edu page last updated 2026-06-09)",
+    verification: "High — course list verified via NU program page + learn.org course table",
+    sequenceNote: "Order inferred from prerequisite chain (foundations → core → specialization → capstone); NU publishes a per-student degree plan at enrollment.",
+    courses: [
+      { seq: 1, term: "M1", code: "PSY 5101", title: "Foundations for Graduate Study in Psychology", desc: "Introduction to graduate study in psychology: scholarly expectations, discipline scope, and program planning.", type: "Core", units: "3 sem cr", outcomes: "Establish graduate research, writing, and planning habits.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 2, term: "M2", code: "PSY 5103", title: "Professional Ethics, Law, and Psychology", desc: "Ethical and legal frameworks governing psychological research and practice.", type: "Core", units: "3 sem cr", outcomes: "Apply APA ethics and relevant law to professional decisions.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 3, term: "M3", code: "PSY 5104", title: "Theories of Human Development and Functioning", desc: "Physical, cognitive, and psychosocial development across the lifespan grounded in developmental theory.", type: "Core", units: "3 sem cr", outcomes: "Evaluate development through competing theoretical frames.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 4, term: "M4", code: "PSY 5107", title: "Research Design", desc: "Quantitative and qualitative research fundamentals: design logic, statistics concepts (t-tests, ANOVA, correlation, regression, chi-square), and interpretation.", type: "Core", units: "3 sem cr", outcomes: "Select, interpret, and critique common designs and statistical tests.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 5, term: "M5", code: "PSY 5108", title: "Cognitive and Affective Basis of Behavior", desc: "Biological, cognitive, and emotional processes underlying behavior.", type: "Specialization", units: "3 sem cr", outcomes: "Explain behavior via cognitive-affective mechanisms.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 6, term: "M6", code: "PSY 5109", title: "Theories of Personality", desc: "Major personality theories and their evidence base and applications.", type: "Specialization", units: "3 sem cr", outcomes: "Compare personality frameworks and their applied utility.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 7, term: "M7–M9", code: "PSY 61xx", title: "Specialization electives ×3 (e.g., Multicultural Psychology; Human Communication: Interviewing Skills; Theories of Psychotherapy survey)", desc: "Three electives; the psychotherapy survey reviews psychoanalytic, client-centered, behavioral, cognitive, existential, Gestalt, contemplative, and integrative approaches.", type: "Elective", units: "9 sem cr", outcomes: "Depth in culture, communication, or intervention theory.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+      { seq: 8, term: "M10", code: "PSY 6105", title: "Capstone Course: Psychology", desc: "Culminating synthesis of program knowledge and skills.", type: "Capstone", units: "3 sem cr", outcomes: "Demonstrate integrated program-level mastery.", syllabus: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", syllabusLabel: "NU program page (descriptions)" },
+    ],
+  },
+  {
+    rank: 3,
+    school: "Arizona State University (ASU Online)",
+    location: "Tempe/Glendale, AZ — New College (fully online 'digital immersion')",
+    programName: "MS in Psychology",
+    credits: "36 semester credits (9 core + 24 elective + 3 capstone)",
+    termModel: "7.5-week sessions; multiple starts per year; recommended course sequence published",
+    description:
+      "The strongest public-research-university brand in the fully online generalist space. Curriculum emphasizes cognitive, developmental, physiological, and social psychology with wide elective choice; online students complete the PSY 553 capstone. ASU's 'recommended course sequence' + iPOS is the closest industry analog to WGU's Standard Path + degree plan.",
+    url: "https://degrees.apps.asu.edu/masters-phd/major/ASU00/ASPGSMS/psychology-ms",
+    scores: { rankAvg: 82, sentiment: 84, freshness: 95, composite: 84.8 },
+    sentimentNote: "Strong qualitative sentiment: repeated positive graduate testimonials across guide sites; Reddit threads generally credit rigor + brand value. No single survey %, so scored from qualitative corpus.",
+    refreshed: "2026-07-24 (ASU Degree Search + New College advising, Fall 2025 checklist)",
+    verification: "High — core/capstone codes verified via ASU Degree Search and New College checklist PDF",
+    sequenceNote: "Order follows ASU's published recommended course sequence; electives placed per iPOS (Interactive Plan of Study).",
+    courses: [
+      { seq: 1, term: "S1", code: "PSY 500", title: "Research Methods", desc: "Design and critique of psychological research studies.", type: "Core", units: "3 sem cr", outcomes: "Design defensible studies; evaluate published methods.", syllabus: "https://newcollege.asu.edu/advising/graduate/psychology-masters-degree-online", syllabusLabel: "ASU advising + Fall 2025 checklist PDF" },
+      { seq: 2, term: "S1–S2", code: "PSY 502", title: "Professional Issues in Psychology", desc: "Roles psychologists fill in society, professional ethics, and career pathways.", type: "Core", units: "3 sem cr", outcomes: "Map professional roles, norms, and ethical duties.", syllabus: "https://newcollege.asu.edu/advising/graduate/psychology-masters-degree-online", syllabusLabel: "ASU advising + Fall 2025 checklist PDF" },
+      { seq: 3, term: "S2", code: "PSY 515", title: "Quantitative Analysis I", desc: "Graduate statistics for behavioral science data.", type: "Core", units: "3 sem cr", outcomes: "Run and interpret core inferential analyses.", syllabus: "https://newcollege.asu.edu/advising/graduate/psychology-masters-degree-online", syllabusLabel: "ASU advising + Fall 2025 checklist PDF" },
+      { seq: 4, term: "S3–S10", code: "PSY 5xx/6xx", title: "Elective block — 8 courses across cognitive, social, developmental, and physiological psychology", desc: "24 credits chosen from the elective list; general-track students may take at most 3 credits from each concentration-designated list (not all electives run every year).", type: "Elective", units: "24 sem cr", outcomes: "Breadth across psychology's core content domains plus self-selected depth.", syllabus: "https://newcollege.asu.edu/advising/graduate/psychology-masters-degree-online", syllabusLabel: "ASU advising + Fall 2025 checklist PDF" },
+      { seq: 5, term: "Final", code: "PSY 553", title: "Capstone in Psychology", desc: "Culminating capstone taken in the final session (only culminating option for online students).", type: "Capstone", units: "3 sem cr", outcomes: "Synthesize program learning in a capstone deliverable.", syllabus: "https://newcollege.asu.edu/advising/graduate/psychology-masters-degree-online", syllabusLabel: "ASU advising + Fall 2025 checklist PDF" },
+    ],
+  },
+  {
+    rank: 4,
+    school: "University of Phoenix",
+    location: "Phoenix, AZ (fully online)",
+    programName: "MS in Psychology",
+    credits: "36 credits · 12 courses",
+    termModel: "Two delivery models: instructor-led (one 6-week course at a time) or competency-based Direct Assessment",
+    description:
+      "High-volume generalist MS with the strongest measured student sentiment among the volume leaders (81% recommendation across 3,300+ verified reviews). The competency-based Direct Assessment option is the closest direct competitor to WGU's assessment model in this list.",
+    url: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html",
+    scores: { rankAvg: 80, sentiment: 81, freshness: 90, composite: 81.9 },
+    sentimentNote: "81% verified-student recommendation (OnlineU, 3,300+ reviews). Recurring positives: advisor support, working-adult fit. Recurring negative: assessment variety (e.g., heavy slide-deck assignments in some courses).",
+    refreshed: "2026-07-24 (OnlineU data 2025-12-08; reviews through 2026-06)",
+    verification: "Medium — 36-credit structure + dual delivery model verified; current course codes/titles rotate by catalog version — confirm at program link",
+    sequenceNote: "Category rows below reflect the catalog's typical sequence (foundations → methods → content core → capstone); course numbering varies by catalog year.",
+    courses: [
+      { seq: 1, term: "C1–C2", code: "per catalog", title: "Graduate foundations + Ethics & professional issues", desc: "Orientation to graduate psychology plus ethical/multicultural professional practice.", type: "Core", units: "6 cr", outcomes: "Graduate scholarship habits; ethical reasoning.", syllabus: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html", syllabusLabel: "UOPX program page (public syllabi not published)" },
+      { seq: 2, term: "C3–C4", code: "per catalog", title: "Research methods + Statistics sequence", desc: "Design, measurement, and statistical analysis for behavioral research.", type: "Core", units: "6 cr", outcomes: "Design and statistically evaluate behavioral studies.", syllabus: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html", syllabusLabel: "UOPX program page (public syllabi not published)" },
+      { seq: 3, term: "C5–C9", code: "per catalog", title: "Content core: lifespan development, social, cognition & learning, personality, psychopathology", desc: "Survey core across the major content domains of psychology.", type: "Core", units: "15 cr", outcomes: "Command of psychology's principal content domains.", syllabus: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html", syllabusLabel: "UOPX program page (public syllabi not published)" },
+      { seq: 4, term: "C10–C11", code: "per catalog", title: "Elective / applied topic courses", desc: "Applied or elective coursework per current catalog.", type: "Elective", units: "6 cr", outcomes: "Applied depth in selected topics.", syllabus: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html", syllabusLabel: "UOPX program page (public syllabi not published)" },
+      { seq: 5, term: "Final", code: "per catalog", title: "Capstone in Psychology", desc: "Culminating integration of program knowledge.", type: "Capstone", units: "3 cr", outcomes: "Integrated demonstration of program outcomes.", syllabus: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html", syllabusLabel: "UOPX program page (public syllabi not published)" },
+    ],
+  },
+  {
+    rank: 5,
+    school: "Southern New Hampshire University",
+    location: "Manchester, NH (100% online, no campus visits)",
+    programName: "MS in Psychology (General track)",
+    credits: "36 credits (24 major + 12 elective/concentration) · finishable in ~15 months",
+    termModel: "Five 10-week terms per year; asynchronous",
+    description:
+      "The #2 volume producer (858 grads) and one of the most aggressively marketed generalist programs. Research-focused, non-clinical curriculum spanning cognitive, social, and developmental psychology; optional concentrations in Child & Development, Forensic, and I-O.",
+    url: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology",
+    scores: { rankAvg: 90, sentiment: 71, freshness: 85, composite: 81.7 },
+    sentimentNote: "71% verified-student recommendation (OnlineU) — solid but the lowest of the volume leaders; reviews praise flexibility/price, critique rubric-driven grading consistency.",
+    refreshed: "2026-07-24 (snhu.edu live; detailed course list per onlineeducation.com profile)",
+    verification: "High for structure/titles; PSY 510 code independently verified — remaining codes via catalog",
+    sequenceNote: "Order reflects SNHU's published major sequence (methods first, capstone last); foundations added for non-psych bachelor's holders.",
+    courses: [
+      { seq: 0, term: "Pre", code: "PSY 5xx", title: "Foundations (only if needed): Foundations of Psychology; Foundations in Statistics; Foundations in Research Methods", desc: "Leveling courses for students without a psychology bachelor's.", type: "Prerequisite", units: "0–9 cr", outcomes: "Baseline psych, stats, and methods readiness.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 1, term: "T1", code: "PSY 510", title: "Research Methods in Psychology I", desc: "Scientific method, design fundamentals, ethics, and SPSS-based analysis foundations.", type: "Core", units: "3 cr", outcomes: "Frame research questions; run descriptive analyses in SPSS.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 2, term: "T1", code: "PSY 520", title: "Research Methods in Psychology II", desc: "Advanced design and inferential analysis building on Methods I.", type: "Core", units: "3 cr", outcomes: "Execute and report inferential designs.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 3, term: "T2", code: "per catalog", title: "Cognitive Processes", desc: "Attention, memory, language, and thinking at graduate depth.", type: "Core", units: "3 cr", outcomes: "Apply cognitive models to applied questions.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 4, term: "T2", code: "per catalog", title: "Social Psychology", desc: "Social influence, attitudes, and group processes.", type: "Core", units: "3 cr", outcomes: "Explain behavior in social context.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 5, term: "T3", code: "per catalog", title: "Theories of Personality", desc: "Major personality frameworks and their evidence base.", type: "Core", units: "3 cr", outcomes: "Compare and apply personality theories.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 6, term: "T3", code: "per catalog", title: "Measurement and Assessment", desc: "Psychometrics: reliability, validity, and test construction/interpretation.", type: "Core", units: "3 cr", outcomes: "Evaluate and select psychological measures.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 7, term: "T4", code: "per catalog", title: "Ethical Practice in Psychology", desc: "APA ethics applied to research and practice scenarios.", type: "Core", units: "3 cr", outcomes: "Resolve ethical dilemmas with APA standards.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 8, term: "T4–T5", code: "per catalog", title: "General-track electives ×4 (or concentration set)", desc: "12 credits of electives, or a named concentration (Child & Development / Forensic / I-O).", type: "Elective", units: "12 cr", outcomes: "Self-directed or concentration depth.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+      { seq: 9, term: "Final", code: "per catalog", title: "Capstone in Psychology", desc: "Culminating applied project integrating methods and content.", type: "Capstone", units: "3 cr", outcomes: "Demonstrate integrated program mastery.", syllabus: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", syllabusLabel: "SNHU program page (public syllabi not published)" },
+    ],
+  },
+  {
+    rank: 6,
+    school: "Nova Southeastern University",
+    location: "Fort Lauderdale, FL (fully online)",
+    programName: "MS in General Psychology (General or Applied Health Science track)",
+    credits: "30 credits",
+    termModel: "Three start dates per year (Aug / Jan / May)",
+    description:
+      "Psychology.org's 'Most Versatile' 2026 pick: a compact 30-credit doctoral-prep generalist MS with an optional thesis on the general track and an applied health science alternative. No psych bachelor's required; strongest editorial-review standing of the private nonprofits here.",
+    url: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html",
+    scores: { rankAvg: 85, sentiment: 74, freshness: 92, composite: 81.6 },
+    sentimentNote: "No large survey base; sentiment estimated from editorial reviews, academic reputation, and student commentary (positive on faculty/doctoral prep; cost noted as a negative at $955/credit).",
+    refreshed: "2026-07-24 (nova.edu curriculum live; psychology.org facts verified 2025-11)",
+    verification: "High — curriculum page verified on psychology.nova.edu",
+    sequenceNote: "Order inferred from prerequisite chain (methods/foundations early, track + thesis last); NSU issues a per-cohort plan of study.",
+    courses: [
+      { seq: 1, term: "T1", code: "per catalog", title: "Research Methods", desc: "Design and evaluation of psychological research.", type: "Core", units: "3 cr", outcomes: "Design and critique research; prep for thesis work.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 2, term: "T1", code: "PSY 0605", title: "Human Growth and Development", desc: "How maturation and social learning shape people across the lifespan; developmental theory and research.", type: "Core", units: "3 cr", outcomes: "Apply developmental theory across the lifespan.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 3, term: "T2", code: "per catalog", title: "Cognitive Psychology", desc: "Graduate survey of cognition: perception, memory, reasoning.", type: "Core", units: "3 cr", outcomes: "Explain behavior via cognitive mechanisms.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 4, term: "T2", code: "per catalog", title: "Behavioral Neuroscience", desc: "Brain-behavior relationships and physiological bases of psychological processes.", type: "Core", units: "3 cr", outcomes: "Link neural systems to behavior and disorder.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 5, term: "T3", code: "per catalog", title: "Adult Psychopathology", desc: "Etiology, classification, and research on adult mental disorders.", type: "Core", units: "3 cr", outcomes: "Evaluate psychopathology models and evidence.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 6, term: "T3", code: "per catalog", title: "Social Psychology (graduate survey)", desc: "Self-perception, judgment and decision-making, attitude change, conformity, attraction, aggression, altruism, prejudice.", type: "Core", units: "3 cr", outcomes: "Apply social-psych research to real-world influence questions.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 7, term: "T4", code: "PSY 0609", title: "Individual Evaluation and Assessment", desc: "Survey of frequently used aptitude, interest, and personality tests.", type: "Core", units: "3 cr", outcomes: "Interpret standard psychological assessments.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 8, term: "T4", code: "PSY 0616", title: "History and Systems of Psychology", desc: "Major schools of thought and how core psychological concepts have been reinterpreted over time.", type: "Core", units: "3 cr", outcomes: "Situate modern psychology in its intellectual history.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+      { seq: 9, term: "Final", code: "per catalog", title: "Track block: General Psychology (incl. master's thesis option) or Applied Health Science (9 cr)", desc: "General track adds an optional thesis for doctoral-bound students; applied track covers business of psychology and clinical assessment topics.", type: "Track / Capstone", units: "9 cr", outcomes: "Doctoral-prep research output or applied health depth.", syllabus: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", syllabusLabel: "NSU curriculum page" },
+    ],
+  },
+  {
+    rank: 7,
+    school: "Liberty University",
+    location: "Lynchburg, VA (fully online)",
+    programName: "MA in Applied Psychology — General Psychology track",
+    credits: "36 credits · 8-week courses · up to 50% transfer",
+    termModel: "8-week terms, multiple starts per year",
+    description:
+      "Large faith-integrated generalist option (psychological science evaluated alongside a Christian worldview). Notable for the most transparent public course documentation in this set — per-course 'Course Guides' function as public syllabi.",
+    url: "https://www.liberty.edu/online/behavioral-sciences/masters/applied-psychology/",
+    scores: { rankAvg: 78, sentiment: 75, freshness: 95, composite: 79.4 },
+    sentimentNote: "75% verified-student recommendation (OnlineU). Reviews cite flexibility and transfer generosity; worldview integration polarizes reviewers.",
+    refreshed: "2026-07-24 (live graduate catalog + course guides)",
+    verification: "High — codes/titles/credits verified in Liberty graduate catalog",
+    sequenceNote: "Order follows Liberty's degree completion plan (DCP) — its published Standard Path equivalent (methods sequence first).",
+    courses: [
+      { seq: 1, term: "T1", code: "PSYC 510", title: "Research Methods and Statistics in Psychology I", desc: "Descriptive, predictive, and experimental research with statistical software and research ethics.", type: "Core", units: "3 cr", outcomes: "Run and interpret foundational analyses; apply research ethics.", syllabus: "https://www.liberty.edu/online/courses/psyc510", syllabusLabel: "Public Course Guide (syllabus-level)" },
+      { seq: 2, term: "T2", code: "PSYC 515", title: "Research Methods and Statistics in Psychology II", desc: "Advanced methodology and statistics; design, conduct, and present research in APA style.", type: "Core", units: "3 cr", outcomes: "Design and report complete studies in APA format. Prereq: PSYC 510.", syllabus: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", syllabusLabel: "Graduate catalog course listing" },
+      { seq: 3, term: "T2", code: "PSYC 520", title: "Psychology and Christianity", desc: "Philosophical foundations and models for relating psychological science and Christian faith.", type: "Core", units: "3 cr", outcomes: "Evaluate integration models across theory, methods, ethics.", syllabus: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", syllabusLabel: "Graduate catalog course listing" },
+      { seq: 4, term: "T3", code: "PSYC 512", title: "Social Psychology", desc: "Attribution, social perception, attitudes, group dynamics, prosocial behavior, aggression, and applications.", type: "Track core", units: "3 cr", outcomes: "Apply social-psych literature to individual behavior in context.", syllabus: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", syllabusLabel: "Graduate catalog course listing" },
+      { seq: 5, term: "T3", code: "PSYC 525", title: "Developmental Psychology", desc: "Development across the lifespan at graduate depth.", type: "Track core", units: "3 cr", outcomes: "Apply developmental science to applied settings.", syllabus: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", syllabusLabel: "Graduate catalog course listing" },
+      { seq: 6, term: "T4", code: "PSYC 516", title: "Industrial/Organizational Psychology (elective example)", desc: "Talent acquisition and management, leadership, job attitudes, organizational development.", type: "Elective", units: "3 cr", outcomes: "Apply psych science to workplace problems.", syllabus: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", syllabusLabel: "Graduate catalog course listing" },
+      { seq: 7, term: "T4–T6", code: "PSYC 5xx/6xx", title: "General-track electives (remaining credits per DCP)", desc: "Remaining electives selected from the graduate PSYC list per the degree completion plan.", type: "Elective", units: "~15 cr", outcomes: "Self-directed generalist breadth.", syllabus: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", syllabusLabel: "Graduate catalog course listing" },
+      { seq: 8, term: "Final", code: "per DCP", title: "Culminating requirement (capstone/thesis option per track)", desc: "Program-culminating experience per the current degree completion plan.", type: "Capstone", units: "3 cr", outcomes: "Integrated demonstration of program outcomes.", syllabus: "https://www.liberty.edu/online/behavioral-sciences/masters/applied-psychology/", syllabusLabel: "Program page / DCP" },
+    ],
+  },
+  {
+    rank: 8,
+    school: "American Public University System (APU)",
+    location: "Charles Town, WV (fully online)",
+    programName: "MA in Psychology — General Psychology concentration",
+    credits: "36 semester hours (per catalog); 8- and 16-week course options",
+    termModel: "Monthly course starts",
+    description:
+      "Budget leader ($8,872/yr) with strong sentiment (79%) and a military/working-adult base. Blends theory, research, scholarly writing, and applied skills across lifespan development, social/cultural competency, personality, human relations, and organizational functioning; unusual niche concentrations sit alongside the general track.",
+    url: "https://www.apu.apus.edu/online-masters-programs/master-of-arts-in-psychology/",
+    scores: { rankAvg: 70, sentiment: 79, freshness: 92, composite: 76.9 },
+    sentimentNote: "79% verified-student recommendation (OnlineU). Reviews credit affordability + faculty responsiveness.",
+    refreshed: "2026-07-24 (live APUS catalog + program page)",
+    verification: "Medium-high — structure, prerequisites, and program objectives verified in catalog; per-course rows summarized (full list at catalog link)",
+    sequenceNote: "Order per catalog structure: research methodology requirement early, concentration and capstone last.",
+    courses: [
+      { seq: 0, term: "Pre", code: "—", title: "Prerequisites: intro/general psychology + research methods + statistical methods (undergrad)", desc: "Required foundation for non-psych bachelor's holders; one combined stats/methods course may satisfy both.", type: "Prerequisite", units: "—", outcomes: "Baseline readiness for graduate methods.", syllabus: "https://catalog.apus.edu/graduate/academic-programs/masters/master-arts-psychology/", syllabusLabel: "APUS catalog" },
+      { seq: 1, term: "T1", code: "per catalog", title: "Graduate research methodology (required)", desc: "Required research methodology course anchoring the degree.", type: "Core", units: "3 cr", outcomes: "Evaluate research questions and methodology against the literature.", syllabus: "https://catalog.apus.edu/graduate/academic-programs/masters/master-arts-psychology/", syllabusLabel: "APUS catalog" },
+      { seq: 2, term: "T1–T4", code: "per catalog", title: "Core: lifespan development; social & cultural competency; personality; human relations; organizational functioning", desc: "Theory core spanning the program's five emphasis areas with scholarly and technical writing throughout.", type: "Core", units: "~15 cr", outcomes: "Broad command of core domains + APA-standard communication and ethics.", syllabus: "https://catalog.apus.edu/graduate/academic-programs/masters/master-arts-psychology/", syllabusLabel: "APUS catalog" },
+      { seq: 3, term: "T5–T6", code: "per catalog", title: "General Psychology concentration block", desc: "Concentration courses per catalog (general track; alternatives include developmental/personality, I-O, military & trauma, child life).", type: "Concentration", units: "~12 cr", outcomes: "Advanced knowledge in the concentration area.", syllabus: "https://catalog.apus.edu/graduate/academic-programs/masters/master-arts-psychology/", syllabusLabel: "APUS catalog" },
+      { seq: 4, term: "Final", code: "per catalog", title: "Culminating requirement (capstone per catalog)", desc: "Program-culminating experience demonstrating the six published program objectives.", type: "Capstone", units: "3 cr", outcomes: "APA-ethics-grounded decisions; professional communication; cultural competence; self-assessment.", syllabus: "https://catalog.apus.edu/graduate/academic-programs/masters/master-arts-psychology/", syllabusLabel: "APUS catalog" },
+    ],
+  },
+  {
+    rank: 9,
+    school: "Angelo State University",
+    location: "San Angelo, TX (fully online) — Texas Tech University System",
+    programName: "MS in Applied Psychology",
+    credits: "36 credits · completable in ~12 months",
+    termModel: "Accelerated terms; thesis and non-thesis options",
+    description:
+      "Research.com's #5 national pick and the fastest public-university path in this set (12-month possible at $641/credit, 96% of students aided). Applied generalist core with research/statistics spine; a value-and-speed benchmark for WGU pricing analysis.",
+    url: "https://www.angelo.edu/",
+    scores: { rankAvg: 72, sentiment: 70, freshness: 80, composite: 72.4 },
+    sentimentNote: "No large survey base; sentiment estimated from Research.com profile data and limited public reviews — treat as directional.",
+    refreshed: "2026-04-21 (Research.com verification) — program page link should be re-verified at angelo.edu",
+    verification: "Medium — length/cost/aid verified via Research.com; per-course detail pending catalog pull (flagged)",
+    sequenceNote: "Category rows pending catalog verification; sequence inferred (methods spine early, thesis/non-thesis capstone last).",
+    courses: [
+      { seq: 1, term: "T1", code: "per catalog", title: "Advanced research methods & statistics core", desc: "Graduate methods and statistics spine for the applied program.", type: "Core", units: "~6 cr", outcomes: "Applied research design + analysis competence.", syllabus: "https://www.angelo.edu/", syllabusLabel: "ASU (Angelo) catalog — verify current listing" },
+      { seq: 2, term: "T1–T3", code: "per catalog", title: "Applied psychology content core (learning/cognition, social, developmental, physiological per catalog)", desc: "Content core across psychology's principal domains with applied emphasis.", type: "Core", units: "~18 cr", outcomes: "Domain breadth with applied framing.", syllabus: "https://www.angelo.edu/", syllabusLabel: "ASU (Angelo) catalog — verify current listing" },
+      { seq: 3, term: "T3–T4", code: "per catalog", title: "Electives per degree plan", desc: "Elective selections per the published degree plan.", type: "Elective", units: "~6 cr", outcomes: "Self-selected depth.", syllabus: "https://www.angelo.edu/", syllabusLabel: "ASU (Angelo) catalog — verify current listing" },
+      { seq: 4, term: "Final", code: "per catalog", title: "Thesis or non-thesis culminating option", desc: "Thesis for doctoral-bound students; non-thesis comprehensive option otherwise.", type: "Capstone", units: "~6 cr", outcomes: "Research output or comprehensive synthesis.", syllabus: "https://www.angelo.edu/", syllabusLabel: "ASU (Angelo) catalog — verify current listing" },
+    ],
+  },
+  {
+    rank: 10,
+    school: "Purdue University Global",
+    location: "West Lafayette, IN system / online",
+    programName: "MS in Psychology — General Psychology concentration",
+    credits: "60–75 quarter credit hours depending on track",
+    termModel: "10-week terms; optional thesis track adds two thesis-development courses (+1 term minimum)",
+    description:
+      "Public-system-backed generalist MS balancing disciplinary tradition with contemporary application; core + concentration + PS598 capstone (a full research proposal: literature review, testable hypothesis, empirical method). The heaviest published capstone research requirement in this set.",
+    url: "https://www.purdueglobal.edu/degree-programs/psychology/master-degree-psychology/",
+    scores: { rankAvg: 62, sentiment: 75, freshness: 92, composite: 71.7 },
+    sentimentNote: "75% verified-student recommendation (OnlineU); Fortune-profiled faculty access is a recurring positive.",
+    refreshed: "2026-07-24 (2025–26 catalog live)",
+    verification: "High for structure/capstone; core course codes at catalog link",
+    sequenceNote: "Order per catalog: core → concentration → (optional thesis courses) → capstone.",
+    courses: [
+      { seq: 1, term: "T1–T3", code: "per catalog", title: "Master's core (psychological theory, individual experience & behavior, research, ethics)", desc: "Core curriculum on the processes underlying individual experience and behavior, plus disciplinary knowledge, theory, and research.", type: "Core", units: "per catalog (qtr cr)", outcomes: "Understand contemporary + historical disciplinary knowledge; critical thinking and problem solving.", syllabus: "https://catalog.purdueglobal.edu/graduate/social-behavioral-sciences/psychology-ms/", syllabusLabel: "Purdue Global catalog" },
+      { seq: 2, term: "T4–T5", code: "per catalog", title: "General Psychology concentration block", desc: "Concentration coursework (alternatives: addictions, forensic, I-O).", type: "Concentration", units: "per catalog (qtr cr)", outcomes: "Concentration-level depth in general psychology.", syllabus: "https://catalog.purdueglobal.edu/graduate/social-behavioral-sciences/psychology-ms/", syllabusLabel: "Purdue Global catalog" },
+      { seq: 3, term: "Optional", code: "per catalog", title: "Thesis track: two thesis-development courses (optional)", desc: "Optional thesis pathway extending the program by at least one term.", type: "Elective (track)", units: "per catalog (qtr cr)", outcomes: "Formal written thesis proposal to a committee.", syllabus: "https://catalog.purdueglobal.edu/graduate/social-behavioral-sciences/psychology-ms/", syllabusLabel: "Purdue Global catalog" },
+      { seq: 4, term: "Final", code: "PS598", title: "Master's Capstone in Psychology", desc: "Written capstone spanning core + concentration: a research proposal with literature review, testable hypothesis, and empirical test method.", type: "Capstone", units: "per catalog (qtr cr)", outcomes: "Demonstrate program-outcome mastery via a complete research proposal.", syllabus: "https://catalog.purdueglobal.edu/graduate/social-behavioral-sciences/psychology-ms/", syllabusLabel: "Purdue Global catalog" },
+    ],
+  },
+];
+
+const SOURCES = [
+  { category: "Ranking site (numbered list)", name: "OnlineU / Optimal — 2026 Best Master's Degrees in Psychology Online", url: "https://www.onlineu.com/degrees/masters-psychology", used: "Rank positions by IPEDS graduate counts (popularity pillar); verified-student recommendation rates (sentiment pillar); tuition + median salary context. Updated 2025-12-08; 90,000+ student surveys.", accessed: "2026-07-24" },
+  { category: "Ranking site (editorial picks)", name: "Psychology.org — Best Online Master's in Psychology Programs for 2026", url: "https://www.psychology.org/degrees/masters/", used: "Editorial top picks (NSU, Roosevelt, U Idaho, ULM, USD), program facts (verified Nov 2025), curriculum snapshots, cost benchmarks. Published 2026-05-20.", accessed: "2026-07-24" },
+  { category: "Ranking site (numbered list)", name: "Research.com — 2026 Best Online Master's in Psychology Programs (USA)", url: "https://research.com/rankings/psychology/best-online-psychology-master-usa", used: "Numbered top 10 (Harvard, National, USC, K-State, Angelo State, Ball State, Regent, UND, NMSU, WVU); per-program length/cost/aid data; graduate testimonials. Updated 2026-04-21.", accessed: "2026-07-24" },
+  { category: "Ranking site", name: "Forbes Advisor — Best Online Psychology Master's Degrees", url: "https://www.forbes.com/advisor/education/psychology-and-counseling/best-online-psychology-masters-degrees/", used: "Cross-check of top-10 composition (IPEDS-based, 15 data points); most entries specialized (Bay Path, FSU, GMU) so limited generalist overlap. Updated ~2026-06.", accessed: "2026-07-24" },
+  { category: "Ranking site", name: "AccreditedSchoolsOnline.org — Best Online Master's in Psychology 2026", url: "https://www.accreditedschoolsonline.org/psychology/masters/", used: "Superlative-based 2026 list; corroborated NSU's 30-credit general/applied-health structure.", accessed: "2026-07-24" },
+  { category: "Ranking site", name: "BestPsychologyDegrees.com — 10 Best Online Master's in Psychology 2026", url: "https://www.bestpsychologydegrees.com/top/online-masters/", used: "Cross-check on fully-online generalist availability and concentration breadth. Updated 2026-07-15.", accessed: "2026-07-24" },
+  { category: "Ranking context", name: "U.S. News — 2026 Best Online Programs (announcement)", url: "https://www.usnews.com/education/online-education/articles/us-news-ranks-best-online-programs", used: "Methodology + online-brand context (U.S. News ranks online psych at the bachelor's level and educational psychology at master's; no general online psych-master's numbered list, so it informs brand strength, not the rank average).", accessed: "2026-07-24" },
+  { category: "Sentiment — quantitative", name: "OnlineU verified-student recommendation rates + published reviews", url: "https://www.onlineu.com/degrees/masters-psychology", used: "Primary quantitative sentiment: Capella 76%, SNHU 71%, UOPX 81% (3,300+ reviews), Liberty 75%, APUS 79%, Purdue Global 75%; review texts mined for course-level valence (2025–2026 review dates).", accessed: "2026-07-24" },
+  { category: "Sentiment — qualitative", name: "Research.com graduate testimonials + guide-site student commentary", url: "https://research.com/rankings/psychology/best-online-psychology-master-usa", used: "Qualitative sentiment for programs without survey rates (ASU, NSU, National, Angelo State), including named ASU testimonials.", accessed: "2026-07-24" },
+  { category: "Sentiment — qualitative", name: "Reddit (r/psychologystudents, school subs), GradReports, Niche — category", url: "https://www.reddit.com/", used: "Directional corroboration only. Course-level review density is low on public platforms; used to sanity-check program-level sentiment and surface recurring course mentions (methods/stats sequences, capstones).", accessed: "2026-07-24" },
+  { category: "Sentiment — context", name: "Fortune Education — Is an online master's in psychology worth it?", url: "https://fortune.com/education/articles/is-an-online-masters-degree-in-psychology-worth-it", used: "Purdue Global faculty-access sentiment context (2022 article; weighted accordingly).", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "ASU Degree Search + New College advising + Fall 2025 online checklist (PDF)", url: "https://newcollege.asu.edu/advising/graduate/psychology-masters-degree-online", used: "ASU core (PSY 500/502/515), elective rules, PSY 553 capstone, recommended course sequence, iPOS.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "Capella University — MS Psychology, General Psychology program + courses pages", url: "https://www.capella.edu/online-psychology-degrees/ms-psychology-program/masters-general-psychology/courses/", used: "Course codes, credits, descriptions, example course sequence, GuidedPath/FlexPath models.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "National University — MA Psychology, General Psychology page (+ learn.org course table)", url: "https://www.nu.edu/programs/master-of-arts-degree-in-psychology/general-psychology-ma-psy/", used: "30-credit structure, weekly starts, course list (PSY 5101–6105), non-licensure disclosure. NU page updated 2026-06-09.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "SNHU — MS in Psychology program page (+ OnlineEducation.com program profile)", url: "https://www.snhu.edu/online-degrees/masters/ms-in-psychology", used: "36-credit structure, 10-week terms, major course titles, foundations requirement, concentrations.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "NSU College of Psychology — MS General Psychology curriculum page", url: "https://psychology.nova.edu/graduate/general-psychology/curriculum.html", used: "Course-level detail (PSY 0605/0609/0616 + core), track structure, thesis option.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "Liberty University — graduate catalog PSYC listings + public Course Guides", url: "https://catalog.liberty.edu/graduate/courses/courses-graduate/psyc/", used: "Verified codes/descriptions (PSYC 510/512/515/516/520/525); Course Guides serve as public syllabi.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "APUS catalog — MA in Psychology", url: "https://catalog.apus.edu/graduate/academic-programs/masters/master-arts-psychology/", used: "Prerequisites, concentration list, program objectives, structure.", accessed: "2026-07-24" },
+  { category: "Primary — curriculum", name: "Purdue Global — MS in Psychology (2025–26 catalog + program page/brochure)", url: "https://catalog.purdueglobal.edu/graduate/social-behavioral-sciences/psychology-ms/", used: "60–75 qtr-credit tracks, PS598 capstone requirements, thesis-track rules.", accessed: "2026-07-24" },
+  { category: "Primary — program page", name: "University of Phoenix — MS in Psychology", url: "https://www.phoenix.edu/online-psychology-degrees/psych-masters-degree.html", used: "36-credit structure and dual delivery model (6-week instructor-led vs competency-based Direct Assessment), corroborated via OnlineU profile.", accessed: "2026-07-24" },
+  { category: "Primary — program data", name: "Angelo State University — via Research.com profile", url: "https://research.com/rankings/psychology/best-online-psychology-master-usa", used: "36 credits, 12-month length, $641/credit, 96% aided. Per-course catalog pull flagged for follow-up.", accessed: "2026-07-24" },
+  { category: "Popularity data", name: "IPEDS (NCES) graduate counts — via OnlineU methodology", url: "https://nces.ed.gov/ipeds/", used: "Program-completion volumes underpinning the popularity signal (Capella 1,025; SNHU 858; National 804; UOPX 535; Liberty 261; APUS 107; Purdue Global 95).", accessed: "2026-07-24" },
+  { category: "Screening / exclusions", name: "Harvard Extension School — Psychology Master's program page", url: "https://extension.harvard.edu/academics/programs/psychology-graduate-program", used: "EXCLUDED from top 10 despite Research.com #1: requires on-campus experience (2 weekends or a 3-week summer course; 11 of 12 courses online) — fails the online-only screen. $3,440/course.", accessed: "2026-07-24" },
+  { category: "Screening / exclusions", name: "Specialized or licensure programs excluded as non-generalist", url: "https://www.onlineu.com/degrees/masters-psychology", used: "USC (applied/consumer-org), George Mason (I-O only), FIU (FL-only counseling licensure), Sofia (counseling), Ball State (quantitative), Bay Path (developmental), Franklin (business), U Idaho (human factors), U South Dakota (ed psych). Roosevelt + ULM = nearest generalist misses (single-list presence).", accessed: "2026-07-24" },
+];
+
+const PILLARS = [
+  { key: "rankAvg", label: "Ranking avg", weight: 0.45, color: INDIGO },
+  { key: "sentiment", label: "Sentiment", weight: 0.4, color: TEAL },
+  { key: "freshness", label: "Freshness", weight: 0.15, color: AMBER },
+];
+
+function buildXlsx() {
+  const rows = [];
+  PROGRAMS.forEach((p) => {
+    p.courses.forEach((c) => {
+      rows.push({
+        "Rank": p.rank,
+        "School": p.school,
+        "Program Name": p.programName,
+        "Program Description": p.description,
+        "Program Link": p.url,
+        "Composite Score": p.scores.composite,
+        "Ranking Avg (45%)": p.scores.rankAvg,
+        "Sentiment (40%)": p.scores.sentiment,
+        "Freshness (15%)": p.scores.freshness,
+        "Sentiment Basis": p.sentimentNote,
+        "Credits / Structure": p.credits,
+        "Term Model": p.termModel,
+        "Seq (Standard Path order)": c.seq,
+        "Suggested Term": c.term,
+        "Course Code": c.code,
+        "Course Title": c.title,
+        "Course Description": c.desc,
+        "Course Type": c.type,
+        "Course Units": c.units,
+        "Competencies / Outcomes": c.outcomes,
+        "Syllabus / Catalog Link": c.syllabus,
+        "Syllabus Source Note": c.syllabusLabel,
+        "Sequence Basis": p.sequenceNote,
+        "Data Refreshed": p.refreshed,
+        "Verification Level": p.verification,
+      });
+    });
+  });
+  const wb = XLSX.utils.book_new();
+  const ws1 = XLSX.utils.json_to_sheet(rows);
+  ws1["!cols"] = [
+    { wch: 5 }, { wch: 30 }, { wch: 42 }, { wch: 60 }, { wch: 45 },
+    { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 60 },
+    { wch: 38 }, { wch: 38 }, { wch: 8 }, { wch: 10 }, { wch: 12 },
+    { wch: 55 }, { wch: 65 }, { wch: 14 }, { wch: 12 }, { wch: 55 },
+    { wch: 50 }, { wch: 32 }, { wch: 45 }, { wch: 28 }, { wch: 40 },
+  ];
+  XLSX.utils.book_append_sheet(wb, ws1, "Top 10 Programs");
+
+  const ws2 = XLSX.utils.json_to_sheet(
+    SOURCES.map((s) => ({
+      "Category": s.category,
+      "Source": s.name,
+      "URL": s.url,
+      "How it was used": s.used,
+      "Date accessed": s.accessed,
+    }))
+  );
+  ws2["!cols"] = [{ wch: 28 }, { wch: 55 }, { wch: 55 }, { wch: 90 }, { wch: 14 }];
+  XLSX.utils.book_append_sheet(wb, ws2, "Attribution & Sources");
+  XLSX.writeFile(wb, "wgu-online-psych-masters-competitive-analysis.xlsx");
+}
+
+function ScoreBar({ scores }) {
+  const parts = PILLARS.map((p) => ({ ...p, value: scores[p.key], contrib: scores[p.key] * p.weight }));
+  const total = parts.reduce((a, b) => a + b.contrib, 0);
+  return (
+    <div className="w-full">
+      <div className="flex h-2 w-full overflow-hidden rounded-sm" style={{ background: "#EDEFF1" }}>
+        {parts.map((p) => (
+          <div key={p.key} style={{ width: `${(p.contrib / 100) * 100}%`, background: p.color }} title={`${p.label}: ${p.value}/100 × ${p.weight}`} />
+        ))}
+      </div>
+      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs" style={{ color: "#5B6672", fontFamily: MONO }}>
+        {parts.map((p) => (
+          <span key={p.key}>
+            <span className="mr-1 inline-block h-2 w-2 rounded-sm align-middle" style={{ background: p.color }} />
+            {p.label} {p.value}
+          </span>
+        ))}
+        <span style={{ color: INK }}>Composite {total.toFixed(1)}</span>
+      </div>
+    </div>
+  );
+}
+
+function CourseTable({ program }) {
+  const th = "px-2 py-1.5 text-left align-bottom font-semibold";
+  const td = "px-2 py-1.5 align-top";
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse text-xs" style={{ color: INK, minWidth: 900 }}>
+        <thead>
+          <tr style={{ borderBottom: `2px solid ${INK}`, color: "#3A4550" }}>
+            <th className={th} style={{ fontFamily: MONO, width: 44 }}>Seq</th>
+            <th className={th} style={{ fontFamily: MONO, width: 60 }}>Term</th>
+            <th className={th} style={{ fontFamily: MONO, width: 84 }}>Code</th>
+            <th className={th} style={{ width: 220 }}>Course title</th>
+            <th className={th}>Course description</th>
+            <th className={th} style={{ width: 88 }}>Type</th>
+            <th className={th} style={{ width: 72 }}>Units</th>
+            <th className={th} style={{ width: 200 }}>Competencies / outcomes</th>
+            <th className={th} style={{ width: 150 }}>Syllabus / catalog</th>
+          </tr>
+        </thead>
+        <tbody>
+          {program.courses.map((c, i) => (
+            <tr key={i} style={{ borderBottom: `1px solid ${RULE}` }}>
+              <td className={td} style={{ fontFamily: MONO }}>{c.seq}</td>
+              <td className={td} style={{ fontFamily: MONO }}>{c.term}</td>
+              <td className={td} style={{ fontFamily: MONO }}>{c.code}</td>
+              <td className={td + " font-medium"}>{c.title}</td>
+              <td className={td} style={{ color: "#3A4550" }}>{c.desc}</td>
+              <td className={td}>
+                <span className="rounded-sm px-1.5 py-0.5" style={{ background: c.type === "Capstone" || c.type === "Track / Capstone" ? "#F3E9DA" : c.type.startsWith("Core") ? "#E7EDF5" : "#EAF4F1", color: "#3A4550" }}>{c.type}</span>
+              </td>
+              <td className={td} style={{ fontFamily: MONO }}>{c.units}</td>
+              <td className={td} style={{ color: "#3A4550" }}>{c.outcomes}</td>
+              <td className={td}>
+                <a href={c.syllabus} target="_blank" rel="noreferrer" className="underline" style={{ color: TEAL }}>{c.syllabusLabel}</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="mt-1.5 text-xs italic" style={{ color: "#6B7580" }}>Sequence basis: {program.sequenceNote}</p>
+    </div>
+  );
+}
+
+function ProgramBlock({ program, open, onToggle }) {
+  return (
+    <section className="mb-5 rounded-md border bg-white" style={{ borderColor: RULE }}>
+      <button onClick={onToggle} className="flex w-full items-start gap-4 p-4 text-left focus:outline-none focus-visible:ring-2" style={{ color: INK }} aria-expanded={open}>
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center border text-2xl" style={{ borderColor: INK, fontFamily: SERIF }}>{program.rank}</div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-3">
+            <h3 className="text-lg" style={{ fontFamily: SERIF }}>{program.school}</h3>
+            <span className="text-xs" style={{ color: "#6B7580", fontFamily: MONO }}>{program.location}</span>
+          </div>
+          <p className="mt-0.5 text-sm font-semibold" style={{ color: "#2C3A4A" }}>{program.programName}</p>
+          <p className="mt-1 text-sm" style={{ color: "#3A4550" }}>{program.description}</p>
+          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs" style={{ color: "#5B6672" }}>
+            <span><span className="font-semibold" style={{ color: INK }}>Structure:</span> {program.credits}</span>
+            <span><span className="font-semibold" style={{ color: INK }}>Terms:</span> {program.termModel}</span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+            <a href={program.url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="underline" style={{ color: TEAL }}>Program page ↗</a>
+            <span style={{ color: "#6B7580", fontFamily: MONO }}>Refreshed: {program.refreshed}</span>
+            <span style={{ color: AMBER }}>{program.verification}</span>
+          </div>
+          <div className="mt-3 max-w-xl"><ScoreBar scores={program.scores} /></div>
+          <p className="mt-1.5 text-xs" style={{ color: "#5B6672" }}><span className="font-semibold" style={{ color: TEAL }}>Sentiment basis:</span> {program.sentimentNote}</p>
+        </div>
+        <div className="shrink-0 pt-1 text-sm" style={{ color: "#6B7580" }}>{open ? "− hide courses" : "+ courses"}</div>
+      </button>
+      {open && (
+        <div className="border-t px-4 pb-4 pt-3" style={{ borderColor: RULE }}>
+          <CourseTable program={program} />
+        </div>
+      )}
+    </section>
+  );
+}
+
+function AttributionTab() {
+  const h2 = { fontFamily: SERIF, color: INK };
+  return (
+    <div className="mx-auto max-w-5xl">
+      <h2 className="mb-2 text-xl" style={h2}>Methodology — how this top 10 was derived</h2>
+      <div className="mb-6 space-y-3 text-sm leading-relaxed" style={{ color: "#2C3A4A" }}>
+        <p><span className="font-semibold">Screening.</span> Universe = U.S.-accredited, English-language, fully online (no required campus visits), non-licensure <em>generalist</em> master's in psychology (MA/MS general or general-psychology track). This screen excluded Harvard Extension (Research.com's #1) because it requires an on-campus experience of two weekends or a three-week summer course, and excluded specialized programs (I-O-only, developmental, quantitative, counseling-licensure, human factors, business, and ed-psych degrees).</p>
+        <p><span className="font-semibold">Pillar 1 — Ranking-site average (45%).</span> Rank positions and editorial picks were collected from six 2026 ranking publications (OnlineU, Psychology.org, Research.com, Forbes Advisor, AccreditedSchoolsOnline, BestPsychologyDegrees), normalized to a 0–100 scale per site (position percentile for numbered lists; fixed credit for unranked editorial picks), then averaged across every site where the program appears. U.S. News publishes no numbered list for general online psych master's, so it informed brand context only.</p>
+        <p><span className="font-semibold">Pillar 2 — Positive sentiment (40%), and how we derived it.</span> Three layers. <span className="font-semibold" style={{ color: TEAL }}>(a) Structured survey sentiment:</span> OnlineU's verified-student recommendation rates (90,000+ surveys) provided a quantitative program-level positive-sentiment score for 6 of the 10 schools (e.g., UOPX 81% on 3,300+ reviews; APUS 79%; Capella 76%). <span className="font-semibold" style={{ color: TEAL }}>(b) Review-corpus valence coding:</span> published review texts (OnlineU reviews dated 2025–2026, GradReports/Niche/Reddit category) were read for course-level and feature-level mentions and coded positive/negative — e.g., FlexPath pacing (+, Capella), advisor support (+, UOPX), slide-heavy assessments (−, one UOPX I-O reviewer), one-course-at-a-time autonomy (+, National). <span className="font-semibold" style={{ color: TEAL }}>(c) Course-popularity proxy:</span> true per-course public review data barely exists for these programs, so "most popular courses" is proxied by curricular convergence — the courses that appear in 8–10 of the 10 curricula (research methods & statistics, lifespan development, social psychology, cognitive psychology, ethics, capstone) are the market's revealed core-demand set, and the ones review texts most often name positively are the methods/stats sequences and applied capstones. Programs without survey rates (ASU, NSU, National, Angelo State) received estimated scores from the qualitative corpus, flagged as such. With production tooling this becomes an aspect-based sentiment pipeline: scrape review corpora → extract course entities → classify valence → volume-normalize → recency-decay.</p>
+        <p><span className="font-semibold">Pillar 3 — Freshness (15%), factored into rank as requested.</span> Scored from (i) whether curriculum data was verified live on 2026-07-24 vs. via a dated third-party profile, (ii) ranking-edition dates (all 2026 editions), and (iii) review recency. Every program row carries its own refresh date and verification level.</p>
+        <p><span className="font-semibold">Composite.</span> 0.45×RankAvg + 0.40×Sentiment + 0.15×Freshness. Tie at 81.6–81.7 (SNHU vs. NSU) broken by ranking pillar.</p>
+        <p><span className="font-semibold">"Standard Path" terminology mapping.</span> WGU's Standard Path (default term-by-term course sequence in the Program Guide) maps to what competitors publish as a <em>recommended course sequence</em> (ASU's exact term), <em>example course sequence</em> (Capella), <em>degree completion plan / DCP</em> (Liberty), <em>degree plan / plan of study</em> (National, Angelo State, Purdue Global), or an individualized <em>iPOS</em> (ASU). Competitor "terms" are 4–10-week sessions rather than WGU's 6-month terms; the Seq/Term columns preserve each school's published or prerequisite-implied order so courses roll up in Standard Path style.</p>
+      </div>
+
+      <h2 className="mb-2 text-xl" style={h2}>Attribution — every major source</h2>
+      <div className="overflow-x-auto rounded-md border bg-white" style={{ borderColor: RULE }}>
+        <table className="w-full border-collapse text-xs" style={{ color: INK, minWidth: 760 }}>
+          <thead>
+            <tr style={{ borderBottom: `2px solid ${INK}`, color: "#3A4550" }}>
+              <th className="px-2 py-2 text-left font-semibold" style={{ width: 160 }}>Category</th>
+              <th className="px-2 py-2 text-left font-semibold" style={{ width: 220 }}>Source</th>
+              <th className="px-2 py-2 text-left font-semibold">How it was used</th>
+              <th className="px-2 py-2 text-left font-semibold" style={{ width: 90, fontFamily: MONO }}>Accessed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SOURCES.map((s, i) => (
+              <tr key={i} style={{ borderBottom: `1px solid ${RULE}` }}>
+                <td className="px-2 py-2 align-top" style={{ color: "#5B6672" }}>{s.category}</td>
+                <td className="px-2 py-2 align-top">
+                  <a href={s.url} target="_blank" rel="noreferrer" className="underline" style={{ color: TEAL }}>{s.name}</a>
+                </td>
+                <td className="px-2 py-2 align-top" style={{ color: "#3A4550" }}>{s.used}</td>
+                <td className="px-2 py-2 align-top" style={{ fontFamily: MONO, color: "#5B6672" }}>{s.accessed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-3 text-xs italic" style={{ color: "#6B7580" }}>
+        All course descriptions in this workbook are paraphrased summaries of official catalog language — use the linked pages for exact wording. Programs marked with amber verification notes (UOPX, APUS category rows, Angelo State) should get a direct catalog pull before this analysis is circulated as final.
+      </p>
+    </div>
+  );
+}
+
+function CompetitiveAnalysis() {
+  const [tab, setTab] = useState("programs");
+  const [openSet, setOpenSet] = useState(() => new Set([1, 2, 3]));
+
+  const toggle = (rank) => {
+    setOpenSet((prev) => {
+      const next = new Set(prev);
+      next.has(rank) ? next.delete(rank) : next.add(rank);
+      return next;
+    });
+  };
+  const expandAll = () => setOpenSet(new Set(PROGRAMS.map((p) => p.rank)));
+  const collapseAll = () => setOpenSet(new Set());
+
+  const tabBtn = (id, label) => (
+    <button
+      onClick={() => setTab(id)}
+      className="border-b-2 px-1 pb-2 text-sm focus:outline-none focus-visible:ring-2"
+      style={{
+        borderColor: tab === id ? INK : "transparent",
+        color: tab === id ? INK : "#6B7580",
+        fontFamily: SERIF,
+        fontSize: 15,
+      }}
+    >
+      {label}
+    </button>
+  );
+
+  return (
+    <div className="min-h-screen px-4 py-6 sm:px-8" style={{ background: PAPER, color: INK }}>
+      <header className="mx-auto mb-6 max-w-6xl">
+        <p className="text-xs uppercase tracking-widest" style={{ color: "#6B7580", fontFamily: MONO }}>WGU · EPD competitive analysis · refreshed {REFRESH_DEFAULT}</p>
+        <div className="mt-1 flex flex-wrap items-end justify-between gap-3">
+          <h1 className="text-2xl sm:text-3xl" style={{ fontFamily: SERIF }}>
+            Online-Only Generalist Master's in Psychology — Top 10
+          </h1>
+          <button
+            onClick={buildXlsx}
+            className="rounded-md px-4 py-2 text-sm font-semibold text-white focus:outline-none focus-visible:ring-2"
+            style={{ background: TEAL }}
+          >
+            Download .xlsx (both tabs)
+          </button>
+        </div>
+        <p className="mt-2 max-w-4xl text-sm" style={{ color: "#3A4550" }}>
+          Order = 45% ranking-site average + 40% positive sentiment + 15% data freshness. Fully online, English, non-licensure generalist programs only — Harvard Extension excluded for its on-campus requirement (see Attribution tab). Courses roll up under each program in Standard Path order (each school's published recommended course sequence, or prerequisite-implied order where none is published).
+        </p>
+      </header>
+
+      <nav className="mx-auto mb-5 flex max-w-6xl gap-6 border-b" style={{ borderColor: RULE }}>
+        {tabBtn("programs", "Tab 1 — Top 10 programs & courses")}
+        {tabBtn("attribution", "Tab 2 — Attribution & methodology")}
+      </nav>
+
+      <main className="mx-auto max-w-6xl">
+        {tab === "programs" ? (
+          <>
+            <div className="mb-4 flex flex-wrap items-center gap-3 text-xs" style={{ color: "#5B6672" }}>
+              <button onClick={expandAll} className="underline focus:outline-none focus-visible:ring-2" style={{ color: TEAL }}>Expand all courses</button>
+              <button onClick={collapseAll} className="underline focus:outline-none focus-visible:ring-2" style={{ color: TEAL }}>Collapse all</button>
+              <span style={{ fontFamily: MONO }}>Score bar segments = weighted pillar contributions (indigo ranking · teal sentiment · amber freshness)</span>
+            </div>
+            {PROGRAMS.map((p) => (
+              <ProgramBlock key={p.rank} program={p} open={openSet.has(p.rank)} onToggle={() => toggle(p.rank)} />
+            ))}
+            <p className="mb-8 text-xs italic" style={{ color: "#6B7580" }}>
+              Nearest generalist misses (single-list presence): Roosevelt University MA General Psychology (71.4) and University of Louisiana Monroe MS Psychology (70.5). Full exclusion log on the Attribution tab.
+            </p>
+          </>
+        ) : (
+          <AttributionTab />
+        )}
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<CompetitiveAnalysis />);
+
+  </script>
+</body>
+</html>
